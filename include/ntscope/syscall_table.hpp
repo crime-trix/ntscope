@@ -19,6 +19,17 @@ enum class syscall_source {
     export_order,
 };
 
+constexpr std::string_view to_string(syscall_source source) noexcept
+{
+    switch (source) {
+    case syscall_source::stub:
+        return "stub";
+    case syscall_source::export_order:
+        return "export-order";
+    }
+    return "unknown";
+}
+
 struct syscall_entry {
     std::string name;
     std::uint32_t number = 0;
@@ -67,6 +78,15 @@ inline std::string nt_name_from_zw(std::string_view name)
 
 class syscall_table {
 public:
+    [[nodiscard]] static expected<syscall_table> from_ntdll()
+    {
+        const auto ntdll = module_view::current_process(L"ntdll.dll");
+        if (!ntdll) {
+            return error_code::module_not_found;
+        }
+        return from_module(*ntdll);
+    }
+
     [[nodiscard]] static expected<syscall_table> from_module(module_view module)
     {
         auto exports = export_table::read_entries(module);
@@ -102,6 +122,11 @@ public:
             return std::nullopt;
         }
         return *it;
+    }
+
+    [[nodiscard]] std::size_t count_by_source(syscall_source source) const
+    {
+        return static_cast<std::size_t>(std::ranges::count(entries_, source, &syscall_entry::source));
     }
 
 private:

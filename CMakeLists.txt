@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(ntscope VERSION 0.1.0 LANGUAGES CXX)
+project(ntscope VERSION 0.2.0 LANGUAGES CXX)
 
 option(NTSCOPE_BUILD_EXAMPLES "Build ntscope examples" ${PROJECT_IS_TOP_LEVEL})
 option(NTSCOPE_BUILD_TESTS "Build ntscope tests" ${PROJECT_IS_TOP_LEVEL})

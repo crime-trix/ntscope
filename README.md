@@ -26,6 +26,7 @@ int main() {
 - `module_view`: lightweight view over a module loaded in the current process.
 - `export_table`: validated PE export enumeration with lookup by name.
 - `syscall_table`: searchable `Nt*` metadata with source tracking.
+- `syscall_table::from_ntdll()`: convenience loader for the common `ntdll.dll` path.
 - `native_function<Signature>`: typed lookup for exported Native API routines.
 
 The library does not allocate executable memory and does not install process-wide handlers. It is a metadata layer first: predictable, inspectable, and easy to embed in tools.
